@@ -9,7 +9,7 @@ from factories import mkdir_list, check_file_existance, modify_cells_value
 actual_year = 2022
 root_dir = str(actual_year)
 project_path = os.getcwd()
-file_to_copy = '/home/jaab/PycharmProjects/excel_files_generator/model.xlsx'
+file_to_copy = os.path.join(project_path, 'model.xlsx')
 
 months = [
     'janeiro',
