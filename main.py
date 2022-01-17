@@ -6,10 +6,11 @@ import datetime as dt
 from factories import mkdir_list, check_file_existance, modify_cells_value
 
 # Defining the variables
+project_path = str(input('Digite o caminho do diretório: '))
 actual_year = 2022
 root_dir = str(actual_year)
-project_path = os.getcwd()
-file_to_copy = os.path.join(project_path, 'model.xlsx')
+file_to_copy = r'C:\Users\joaom\Documents\GitHub\excel_files_generator\model.xlsx'  # The path to the model
+root_path = os.path.join(project_path, root_dir)
 
 months = [
     'janeiro',
@@ -45,11 +46,11 @@ last_date = dt.date(actual_year, 12, 31)
 delta = dt.timedelta(days=1)
 
 # Creating the principal directory and the subdirectories
-if root_dir in os.listdir():
-    shutil.rmtree(root_dir)
+if root_dir in os.listdir(project_path):
+    shutil.rmtree(root_path)
+else:
+    os.mkdir(root_dir)
 
-os.mkdir(root_dir)
-root_path = os.path.join(project_path, root_dir)
 mkdir_list(root_path, months)
 
 # Storing every day of year
@@ -59,11 +60,11 @@ while first_date <= last_date:
     first_date += delta
 
 # Entering in the root_dir
-os.chdir(f'{root_dir}')
+os.chdir(root_path)
 
 # Create the dirs
 for index, value in enumerate(months):
-    os.chdir(f'{value}/')
+    os.chdir(value)
 
     for date in all_dates:
         if date.month == index + 1:
@@ -76,6 +77,10 @@ for index, value in enumerate(months):
             for name in file_names:
                 shutil.copyfile(os.path.join(project_path, file_to_copy), os.path.join(os.getcwd(), name))
                 modify_cells_value(name, 'Sheet1', ['D1', 'J1'], date.strftime("%d/%m/%y"))
+                if name == 'Manhã.xlsx':
+                    modify_cells_value(name, 'Sheet1', ['D2', 'J2'], '4:00')
+                if name == 'Tarde.xlsx':
+                    modify_cells_value(name, 'Sheet1', ['D2', 'J2'], '12:15')
 
             os.chdir('../')
 
